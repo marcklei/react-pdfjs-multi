@@ -9,7 +9,7 @@ git config --global user.name "Travis CI"
 yarn build:example
 
 # deploy
-cd examples/simple/build
+cd examples/build
 git init
 git add .
 git commit -m "Deploy to Github Pages"
