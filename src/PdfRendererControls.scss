@@ -7,7 +7,9 @@
   background-image: url('assets/texture.png'),
     linear-gradient(hsla(0, 0%, 32%, 0.99), hsla(0, 0%, 27%, 0.95));
   display: flex;
+  flex: 0 0 32px;
   justify-content: space-around;
+  z-index: 2;
 
   .button-group {
     padding: 4px 2px 4px 0;

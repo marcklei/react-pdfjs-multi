@@ -1,30 +1,50 @@
-import React, { PureComponent } from 'react';
-import { PdfRenderer, PdfjsLib } from 'react-pdfjs-multi';
-import './App.css';
-import 'react-pdfjs-multi/dist/react-pdfjs-multi.css';
+import React, { Fragment, PureComponent } from 'react';
+import RendererExample from './RendererExample';
 
-PdfjsLib.GlobalWorkerOptions.workerSrc =
-  '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.489/pdf.worker.js';
+import './App.css';
 
 class App extends PureComponent {
   state = {
-    pdfDoc: null,
+    activeExample: 'MultiViewerExample',
   };
 
-  async componentDidMount() {
-    const pdfDoc = await PdfjsLib.getDocument({
-      url: 'pdfs/compressed.tracemonkey-pldi-09.pdf',
-    });
+  changeExample = e => {
+    const activeExample = e.currentTarget.innerText;
+    this.setState(() => ({ activeExample }));
+  };
 
-    this.setState(() => ({ pdfDoc }));
+  renderLinks(targets) {
+    return targets.map(target => (
+      <li
+        className={this.state.activeExample === target ? 'active' : ''}
+        onClick={this.changeExample}
+        key={target}
+      >
+        {target}
+      </li>
+    ));
+  }
+
+  renderActiveExample() {
+    switch (this.state.activeExample) {
+      case 'MultiViewerExample':
+        return <div>MultiViewerExample</div>;
+      case 'RendererExample':
+        return <RendererExample />;
+      default:
+        return false;
+    }
   }
 
   render() {
-    const { pdfDoc } = this.state;
-
-    if (!pdfDoc) return false;
-
-    return <PdfRenderer pdfDoc={pdfDoc} />;
+    return (
+      <Fragment>
+        <ul className="examples-nav">
+          {this.renderLinks(['MultiViewerExample', 'RendererExample'])}
+        </ul>
+        <div className="examples">{this.renderActiveExample()}</div>
+      </Fragment>
+    );
   }
 }
 
