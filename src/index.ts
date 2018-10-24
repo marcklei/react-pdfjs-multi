@@ -1,5 +1,6 @@
 import PdfRenderer from './PdfRenderer';
+import PdfMultiViewer from './PdfMultiViewer';
 
 const PdfjsLib = require('pdfjs-dist/build/pdf');
 
-export { PdfRenderer, PdfjsLib };
+export { PdfMultiViewer, PdfRenderer, PdfjsLib };

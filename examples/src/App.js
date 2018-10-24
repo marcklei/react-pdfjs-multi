@@ -1,5 +1,6 @@
 import React, { Fragment, PureComponent } from 'react';
 import RendererExample from './RendererExample';
+import MultiViewerExample from './MultiViewerExample';
 
 import './App.css';
 
@@ -28,7 +29,7 @@ class App extends PureComponent {
   renderActiveExample() {
     switch (this.state.activeExample) {
       case 'MultiViewerExample':
-        return <div>MultiViewerExample</div>;
+        return <MultiViewerExample />;
       case 'RendererExample':
         return <RendererExample />;
       default:

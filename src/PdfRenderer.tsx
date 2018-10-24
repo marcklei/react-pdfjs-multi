@@ -48,11 +48,8 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     this.pdfViewer.setDocument(pdfDoc);
 
     if (autoZoom) {
-      window.addEventListener('resizeAutoZoom', () => {
-        this.autoFitScale();
-      });
-      await this.pdfViewer.firstPagePromise;
-      await this.autoFitScale();
+      window.addEventListener('resizeAutoZoom', this.autoFitScale);
+      this.reScale();
     }
     this.setState(() => ({ isLoading: false }));
   }
@@ -61,14 +58,13 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     const { pdfDoc } = this.props;
     if (pdfDoc !== prevProps.pdfDoc) {
       this.pdfViewer.setDocument(pdfDoc);
+      this.reScale();
     }
   }
 
   componentWillUnmount() {
     if (this.props.autoZoom) {
-      window.removeEventListener('resizeAutoZoom', () => {
-        this.autoFitScale();
-      });
+      window.removeEventListener('resizeAutoZoom', this.autoFitScale);
     }
   }
 
@@ -88,6 +84,11 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
     this.setScale(nextScale * 100);
   };
+
+  async reScale() {
+    await this.pdfViewer.firstPagePromise;
+    await this.autoFitScale();
+  }
 
   setScale = (scale: number) => {
     const { autoZoom } = this.props;
