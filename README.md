@@ -23,9 +23,44 @@ or
 
 `npm i react-pdfjs-multi`
 
+Example Usage:
+
+```javascript
+import React, { PureComponent } from 'react';
+import { PdfMultiViewer } from 'react-pdfjs-multi';
+import 'react-pdfjs-multi/dist/react-pdfjs-multi.css';
+
+const pdfFiles = [
+  'pdfs/test-pdf-a.pdf',
+  {
+    title: 'Trace-based Just-in-Time Type Specialization for DynamicLanguages',
+    source: 'pdfs/compressed.tracemonkey-pldi-09.pdf',
+  },
+  'pdfs/test-pdf-b.pdf',
+  'pdfs/test-pdf-c.pdf',
+];
+
+class MultiViewerExample extends PureComponent {
+  render() {
+    return <PdfMultiViewer pdfs={pdfFiles} />;
+  }
+}
+
+export default MultiViewerExample;
+```
+
 ### PdfMultiViewer
 
-tbd.
+The MultiViewer allows you to pass an array of source strings or an object definition and it then loads all PDF's async and shows the renderer as soon as the first PDF is loaded.
+
+Props:
+
+| Name       | Required | Default | Type      | Description                                                    |
+| ---------- | -------- | ------- | --------- | -------------------------------------------------------------- |
+| pdfs       | true     |         | {array}   | An array of strings or objects                                 |
+| autoZoom   |          | true    | {boolean} | enables/disables autoZoom on component mount and window resize |
+| controls   |          | true    | {boolean} | enables/disables controls to e.g. change renderer zoom         |
+| startIndex |          | 0       | {number}  | first pdf to load using array index                            |
 
 ### PdfRenderer
 
