@@ -5,6 +5,102 @@
   color: #fff;
   position: relative;
 
+  .pdf-multi-viewer-option-bar {
+    padding: 4px 2px 4px 10px;
+
+    .viewer-controls-button {
+      position: relative;
+      min-width: 16px;
+      padding: 2px 6px 0;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      color: hsla(0, 0%, 100%, 0.8);
+      font-size: 12px;
+      line-height: 14px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      cursor: pointer;
+      transition-property: background-color, border-color, box-shadow;
+      transition-duration: 150ms;
+      transition-timing-function: ease;
+      background: none;
+      width: 32px;
+      height: 25px;
+
+      &:first-child {
+        margin: 0;
+        margin-right: -1px;
+        border-top-left-radius: 2px;
+        border-bottom-left-radius: 2px;
+        border-right-color: transparent;
+      }
+
+      &:last-child {
+        position: relative;
+        margin: 0;
+        margin-left: -1px;
+        border-top-right-radius: 2px;
+        border-bottom-right-radius: 2px;
+        border-left-color: transparent;
+      }
+
+      &:hover,
+      &:focus {
+        outline: 0;
+        background-color: hsla(0, 0%, 0%, 0.2);
+        box-shadow: 0 1px 0 hsla(0, 0%, 100%, 0.05) inset,
+          0 0 1px hsla(0, 0%, 100%, 0.15) inset, 0 0 1px hsla(0, 0%, 0%, 0.05);
+        z-index: 199;
+        background-image: linear-gradient(
+          hsla(0, 0%, 100%, 0.05),
+          hsla(0, 0%, 100%, 0)
+        );
+        background-clip: padding-box;
+        border: 1px solid hsla(0, 0%, 0%, 0.35);
+        border-color: hsla(0, 0%, 0%, 0.32) hsla(0, 0%, 0%, 0.38)
+          hsla(0, 0%, 0%, 0.42);
+      }
+
+      &.toggled {
+        background-color: hsla(0, 0%, 0%, 0.3);
+        background-image: linear-gradient(
+          hsla(0, 0%, 100%, 0.05),
+          hsla(0, 0%, 100%, 0)
+        );
+        border-color: hsla(0, 0%, 0%, 0.4) hsla(0, 0%, 0%, 0.45)
+          hsla(0, 0%, 0%, 0.5);
+        box-shadow: 0 1px 1px hsla(0, 0%, 0%, 0.1) inset,
+          0 0 1px hsla(0, 0%, 0%, 0.2) inset, 0 1px 0 hsla(0, 0%, 100%, 0.05);
+      }
+
+      .toggle-list-label {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+
+        &:before {
+          position: absolute;
+          display: inline-block;
+          top: 4px;
+          left: 7px;
+
+          content: url('assets/toolbarButton-sidebarToggle.png');
+
+          @media screen and (-webkit-min-device-pixel-ratio: 2),
+            screen and (min-resolution: 2dppx) {
+            content: url('assets/toolbarButton-sidebarToggle@2x.png');
+            transform: scale(0.5);
+            top: -5px;
+            left: -1px;
+          }
+        }
+      }
+    }
+  }
+
   .pdf-viewer-list {
     float: left;
     background-color: #565656;
@@ -15,6 +111,22 @@
     height: 100%;
     margin: 0;
     padding: 0;
+    transition: margin-left 0.5s;
+
+    &.overlay {
+      position: absolute;
+      z-index: 3;
+      max-width: 100%;
+      min-width: 100%;
+    }
+
+    &.hidden {
+      margin-left: -300px;
+
+      &.overlay {
+        margin-left: -100%;
+      }
+    }
   }
 
   .pdf-viewer-list-item {

@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, RefObject } from 'react';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import PdfRenderer from './PdfRenderer';
 import './PdfMultiViewer.scss';
@@ -8,6 +8,8 @@ const PdfjsLib = require('pdfjs-dist/build/pdf');
 const initialState = {
   files: [],
   activeIndex: 0,
+  listVisible: true,
+  overlayMode: false,
 };
 
 type PdfDefinition = {
@@ -23,6 +25,8 @@ type PdfFile = {
 type State = {
   files: PdfFile[];
   activeIndex: number;
+  listVisible: boolean;
+  overlayMode: boolean;
 };
 type Props = {
   pdfs: PdfSource[];
@@ -36,6 +40,7 @@ type DefaultProps = {
 export default class PdfMultiViewer extends PureComponent<Props, {}> {
   state: State = initialState;
   worker: any;
+  viewerContainer: RefObject<HTMLDivElement>;
 
   static defaultProps: DefaultProps = {
     autoZoom: true,
@@ -50,6 +55,8 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
       '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.489/pdf.worker.js';
 
     this.worker = new PdfjsLib.PDFWorker('pdf-viewer');
+
+    this.viewerContainer = React.createRef();
 
     this.state.activeIndex = props.startIndex as number;
 
@@ -86,9 +93,12 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
   }
 
   changePdf = (activeIndex: number, file: PdfFile) => () => {
+    const { overlayMode, listVisible } = this.state;
     if (!file.pdfProxy) return;
 
     this.setState(() => ({ activeIndex }));
+
+    if (overlayMode && listVisible) this.toggleList();
   };
 
   renderListItems() {
@@ -112,22 +122,59 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
     ));
   }
 
+  toggleList = () =>
+    this.setState((state: State) => ({ listVisible: !state.listVisible }));
+
+  setOverlayMode = () => {
+    const containerWidth =
+      this.viewerContainer.current && this.viewerContainer.current.offsetWidth;
+    const { overlayMode } = this.state;
+
+    if (
+      containerWidth &&
+      containerWidth >= 330 &&
+      containerWidth <= 667 &&
+      !overlayMode
+    ) {
+      this.setState(() => ({ overlayMode: true }));
+    } else if (overlayMode && containerWidth && containerWidth > 667) {
+      this.setState(() => ({ overlayMode: false }));
+    }
+  };
+
   componentDidMount() {
+    window.addEventListener('resizeAutoZoom', this.setOverlayMode);
+    this.setOverlayMode();
     this.loadPdfDocuments();
   }
 
   componentWillUnmount() {
+    window.removeEventListener('resizeAutoZoom', this.setOverlayMode);
     this.worker.destroy();
   }
 
   render() {
-    const { activeIndex, files } = this.state;
+    const { activeIndex, files, listVisible, overlayMode } = this.state;
     const pdfToShow = files[activeIndex];
     const { autoZoom, controls } = this.props;
 
     return (
-      <div className="pdf-multi-viewer">
-        <ul className="pdf-viewer-list">{this.renderListItems()}</ul>
+      <div className="pdf-multi-viewer" ref={this.viewerContainer}>
+        <div className="pdf-multi-viewer-option-bar">
+          <button
+            className={`viewer-controls-button${listVisible ? ' toggled' : ''}`}
+            onClick={this.toggleList}
+          >
+            <span className="toggle-list-label">Toggle list</span>
+          </button>
+        </div>
+        <ul
+          className={`pdf-viewer-list${!listVisible ? ' hidden' : ''}${
+            overlayMode ? ' overlay' : ''
+          }`}
+        >
+          {this.renderListItems()}
+        </ul>
         <div className="pdf-viewer-multi-renderer">
           {pdfToShow.pdfProxy && (
             <PdfRenderer
