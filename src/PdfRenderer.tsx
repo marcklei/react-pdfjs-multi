@@ -68,7 +68,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     }
   }
 
-  autoFitScale = async () => {
+  autoFitScale = () => {
     const firstPageWith = this.pdfViewer._pages[0].viewport.width;
     const currentScale = this.pdfViewer._pages[0].scale;
     const originalWidth = firstPageWith / currentScale;
@@ -79,7 +79,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     let nextScale = -1;
 
     if (this.container.current) {
-      nextScale = containerWidth / originalWidth;
+      nextScale = Math.abs(containerWidth) / originalWidth;
     }
 
     this.setScale(nextScale * 100);
@@ -87,7 +87,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
   async reScale() {
     await this.pdfViewer.firstPagePromise;
-    await this.autoFitScale();
+    this.autoFitScale();
   }
 
   setScale = (scale: number) => {
@@ -97,8 +97,10 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
       return;
     }
 
-    this.setState(() => ({ scale }));
-    this.pdfViewer.currentScaleValue = scale / 100;
+    const nextScale = scale >= 10 ? scale : 10;
+
+    this.setState(() => ({ scale: nextScale }));
+    this.pdfViewer.currentScaleValue = nextScale / 100;
   };
 
   zoomIn = () => {
