@@ -15,9 +15,14 @@ jobs:
         - '10'
       script:
         - yarn test --runInBand --no-cache
-    - stage: deploy ghpages
+    - stage: coverage
       node_js: '8'
       if: tag IS blank AND branch = master AND type != pull_request
+      script:
+        - yarn coveralls
+    - stage: deploy ghpages
+      node_js: '8'
+      if: branch = master
       script:
         - bash ./deploy-examples.sh
     - stage: npm release

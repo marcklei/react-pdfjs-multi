@@ -12,7 +12,8 @@
     "prepare": "npm run build",
     "start": "rollup -c -w",
     "test": "jest --env=jsdom",
-    "test:watch": "npm run test -- --watch"
+    "test:watch": "npm run test -- --watch",
+    "coveralls": "jest --coverage && cat ./__tests__/coverage/lcov.info | coveralls"
   },
   "repository": {
     "type": "git",
@@ -39,6 +40,7 @@
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
     "caniuse-lite": "^1.0.30000886",
+    "coveralls": "^3.0.2",
     "cssnano": "^4.1.0",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
@@ -89,6 +91,7 @@
       "tsx",
       "js",
       "json"
-    ]
+    ],
+    "coverageDirectory": "<rootDir>/__tests__/coverage"
   }
 }
