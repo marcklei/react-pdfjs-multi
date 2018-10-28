@@ -1,5 +1,5 @@
 import React from 'react';
-import { mount, shallow } from 'enzyme';
+import { shallow } from 'enzyme';
 import { PdfMultiViewer, PdfRenderer } from '../../src';
 
 const { getDocument } = require('pdfjs-dist/build/pdf');
@@ -28,7 +28,7 @@ describe('<PdfMultiViewer />', () => {
   });
 
   it('should set overlayMode true', () => {
-    const wrapper = mount<PdfMultiViewer>(
+    const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf']} />,
     );
 
@@ -38,7 +38,7 @@ describe('<PdfMultiViewer />', () => {
   });
 
   it('should set overlayMode false', () => {
-    const wrapper = mount<PdfMultiViewer>(
+    const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf']} />,
     );
     wrapper.setState({ overlayMode: true });
