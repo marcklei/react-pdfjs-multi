@@ -144,17 +144,18 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
     }
   };
 
-  onResizeEvent = () => this.setOverlayMode();
+  getViewerContainerWidth = () =>
+    (this.viewerContainer.current &&
+      this.viewerContainer.current.offsetWidth) ||
+    undefined;
+
+  onResizeEvent = () => this.setOverlayMode(this.getViewerContainerWidth());
 
   componentDidMount() {
+    window.addEventListener('resizeAutoZoom', this.onResizeEvent);
     // since calc() and vh is not supported by jsdom the containerWidth is passed to unit test setOverlayMode
     // https://github.com/jsdom/jsdom/issues/1332#issuecomment-414159311
-    const containerWidth =
-      (this.viewerContainer.current &&
-        this.viewerContainer.current.offsetWidth) ||
-      undefined;
-    window.addEventListener('resizeAutoZoom', this.onResizeEvent);
-    this.setOverlayMode(containerWidth);
+    this.setOverlayMode(this.getViewerContainerWidth());
     this.loadPdfDocuments();
   }
 
