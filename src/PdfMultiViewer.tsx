@@ -17,7 +17,7 @@ type PdfDefinition = {
   source: string;
 };
 type PdfSource = string | PdfDefinition;
-type PdfFile = {
+export type PdfFile = {
   title?: string;
   source: string;
   pdfProxy: PDFDocumentProxy | null;
