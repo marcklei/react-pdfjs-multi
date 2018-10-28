@@ -81,7 +81,6 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     if (this.container.current) {
       nextScale = Math.abs(containerWidth) / originalWidth;
     }
-
     this.setScale(nextScale * 100);
   };
 

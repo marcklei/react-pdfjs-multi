@@ -76,10 +76,10 @@
     },
     "setupFiles": [
       "raf/polyfill",
-      "<rootDir>/test/setupTest.ts"
+      "<rootDir>/__tests__/setup/setupTest.ts"
     ],
     "testMatch": [
-      "<rootDir>/test/**/?(*.)(spec|test).ts?(x)"
+      "<rootDir>/__tests__/**/?(*.)(spec|test).ts?(x)"
     ],
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.ts"
