@@ -3,6 +3,7 @@ import { PDFDocumentProxy } from 'pdfjs-dist';
 import PdfRendererControls from './PdfRendererControls';
 import 'pdfjs-dist/web/pdf_viewer.css';
 import './PdfRenderer.scss';
+import { I18nDataRenderer, defaultI18n, I18nContext } from './I18nContext';
 
 const roundToNearest = (numToRound: number, numToRoundTo: number) =>
   Math.round(numToRound / numToRoundTo) * numToRoundTo;
@@ -15,12 +16,15 @@ const initialState = {
 };
 
 type State = typeof initialState;
+
 type Props = {
   pdfDoc: PDFDocumentProxy;
 } & Partial<DefaultProps>;
+
 type DefaultProps = {
   autoZoom?: boolean;
   controls?: boolean;
+  i18nData?: I18nDataRenderer;
 };
 export default class PdfRenderer extends PureComponent<Props, {}> {
   state: State = initialState;
@@ -30,6 +34,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   static defaultProps: DefaultProps = {
     autoZoom: true,
     controls: true,
+    i18nData: defaultI18n,
   };
 
   constructor(props: Props) {
@@ -140,18 +145,20 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
   render() {
     const { isLoading, scale } = this.state;
-    const { autoZoom, controls } = this.props;
+    const { autoZoom, controls, i18nData } = this.props;
 
     return (
       <div className="renderer-container">
         {controls && (
-          <PdfRendererControls
-            autoZoom={autoZoom}
-            scale={scale}
-            setScale={this.setScale}
-            onZoomIn={this.zoomIn}
-            onZoomOut={this.zoomOut}
-          />
+          <I18nContext.Provider value={{ ...defaultI18n, ...i18nData! }}>
+            <PdfRendererControls
+              autoZoom={autoZoom}
+              scale={scale}
+              setScale={this.setScale}
+              onZoomIn={this.zoomIn}
+              onZoomOut={this.zoomOut}
+            />
+          </I18nContext.Provider>
         )}
         <div
           ref={this.container}

@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import './lib/resizeAutoZoomEvent';
 import './ZoomSelectBox.scss';
+import { I18nDataRenderer, I18nContext } from './I18nContext';
 
 type Props = {
   autoZoom?: boolean;
@@ -15,10 +16,10 @@ class ZoomSelectBox extends PureComponent<Props, {}> {
     setScale: PropTypes.func.isRequired,
   };
 
-  createSelectOptions = () => [
+  createSelectOptions = ({ originalSize, zoom }: I18nDataRenderer) => [
     {
       id: 'automated',
-      text: 'Automatischer Zoom',
+      text: `${zoom}`,
     },
     {
       id: '50-percent',
@@ -32,7 +33,7 @@ class ZoomSelectBox extends PureComponent<Props, {}> {
     },
     {
       id: 'original',
-      text: 'Originalgröße (100%)',
+      text: `${originalSize} (100%)`,
       value: 100,
     },
     {
@@ -65,57 +66,65 @@ class ZoomSelectBox extends PureComponent<Props, {}> {
     },
   ];
 
-  showCalculatedScale = () => {
+  showCalculatedScale = (i18nData: I18nDataRenderer) => {
     const { scale } = this.props;
-    return this.createSelectOptions().filter(option => option.value === scale)
-      .length === 0 && scale % 10 === 0
+    return this.createSelectOptions(i18nData).filter(
+      option => option.value === scale,
+    ).length === 0 && scale % 10 === 0
       ? scale
       : 0;
   };
 
   render() {
     const { autoZoom, scale, setScale } = this.props;
+
     return (
-      <div className="dropdown-toolbar-container">
-        <span className="dropdown-toolbar">
-          <select
-            value={scale}
-            onChange={e => {
-              setScale(parseInt(e.target.value, 10));
-            }}
-          >
-            {this.createSelectOptions().map(({ id, text, value }) => {
-              switch (id) {
-                case 'calculated':
-                  return (
-                    <option
-                      key={`${id}-${scale}`}
-                      value={this.showCalculatedScale()}
-                      hidden={true}
-                      disabled={true}
-                    >
-                      {`${scale}%`}
-                    </option>
-                  );
-                case 'automated':
-                  return (
-                    autoZoom && (
-                      <option key={`${id}-${scale}`} value={-1}>
-                        {text}
-                      </option>
-                    )
-                  );
-                default:
-                  return (
-                    <option key={id} value={value}>
-                      {text}
-                    </option>
-                  );
-              }
-            })}
-          </select>
-        </span>
-      </div>
+      <I18nContext.Consumer>
+        {i18nData => (
+          <div className="dropdown-toolbar-container">
+            <span className="dropdown-toolbar">
+              <select
+                value={scale}
+                onChange={e => {
+                  setScale(parseInt(e.target.value, 10));
+                }}
+              >
+                {this.createSelectOptions(i18nData).map(
+                  ({ id, text, value }) => {
+                    switch (id) {
+                      case 'calculated':
+                        return (
+                          <option
+                            key={`${id}-${scale}`}
+                            value={this.showCalculatedScale(i18nData)}
+                            hidden={true}
+                            disabled={true}
+                          >
+                            {`${scale}%`}
+                          </option>
+                        );
+                      case 'automated':
+                        return (
+                          autoZoom && (
+                            <option key={`${id}-${scale}`} value={-1}>
+                              {text}
+                            </option>
+                          )
+                        );
+                      default:
+                        return (
+                          <option key={id} value={value}>
+                            {text}
+                          </option>
+                        );
+                    }
+                  },
+                )}
+              </select>
+            </span>
+          </div>
+        )}
+      </I18nContext.Consumer>
     );
   }
 }

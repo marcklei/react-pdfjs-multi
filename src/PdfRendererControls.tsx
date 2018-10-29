@@ -1,6 +1,7 @@
 import React, { SFC } from 'react';
 import ZoomSelectBox from './ZoomSelectBox';
 import './PdfRendererControls.scss';
+import { I18nContext } from './I18nContext';
 
 type Props = {
   autoZoom?: boolean;
@@ -19,23 +20,27 @@ const PdfControls: SFC<Props> = ({
 }) => (
   <div className="renderer-controls">
     <div>
-      <div className="button-group">
-        <button
-          className="renderer-controls-button"
-          type="button"
-          onClick={onZoomOut}
-        >
-          <span className="zoom-out-label">Verkleinern</span>
-        </button>
-        <div className="split-button-seperator" />
-        <button
-          className="renderer-controls-button"
-          type="button"
-          onClick={onZoomIn}
-        >
-          <span className="zoom-in-label">Vergrößern</span>
-        </button>
-      </div>
+      <I18nContext.Consumer>
+        {({ scaleDown, scaleUp }) => (
+          <div className="button-group">
+            <button
+              className="renderer-controls-button"
+              type="button"
+              onClick={onZoomOut}
+            >
+              <span className="zoom-out-label">{scaleDown}</span>
+            </button>
+            <div className="split-button-seperator" />
+            <button
+              className="renderer-controls-button"
+              type="button"
+              onClick={onZoomIn}
+            >
+              <span className="zoom-in-label">{scaleUp}</span>
+            </button>
+          </div>
+        )}
+      </I18nContext.Consumer>
       <ZoomSelectBox autoZoom={autoZoom} scale={scale} setScale={setScale} />
     </div>
   </div>

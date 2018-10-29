@@ -14,7 +14,18 @@ const pdfFiles = [
 
 class MultiViewerExample extends PureComponent {
   render() {
-    return <PdfMultiViewer pdfs={pdfFiles} />;
+    return (
+      <PdfMultiViewer
+        pdfs={pdfFiles}
+        i18nData={{
+          scaleDown: 'Verkleinern',
+          scaleUp: 'Vergrößern',
+          originalSize: 'Originalgröße',
+          pages: 'Seiten',
+          zoom: 'Automatischer Zoom',
+        }}
+      />
+    );
   }
 }
 

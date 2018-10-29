@@ -2,6 +2,7 @@ import React, { PureComponent, RefObject } from 'react';
 import { PDFDocumentProxy } from 'pdfjs-dist';
 import PdfRenderer from './PdfRenderer';
 import './PdfMultiViewer.scss';
+import { I18nDataRenderer } from './I18nContext';
 
 const PdfjsLib = require('pdfjs-dist/build/pdf');
 
@@ -16,25 +17,35 @@ type PdfDefinition = {
   title: string;
   source: string;
 };
+
 type PdfSource = string | PdfDefinition;
+
 export type PdfFile = {
   title?: string;
   source: string;
   pdfProxy: PDFDocumentProxy | null;
 };
+
 type State = {
   files: PdfFile[];
   activeIndex: number;
   listVisible: boolean;
   overlayMode: boolean;
 };
+
+type I18nData = {
+  pages?: string;
+} & I18nDataRenderer;
+
 type Props = {
   pdfs: PdfSource[];
 } & Partial<DefaultProps>;
+
 type DefaultProps = {
   autoZoom?: boolean;
   controls?: boolean;
   startIndex?: number;
+  i18nData?: I18nData;
 };
 
 export default class PdfMultiViewer extends PureComponent<Props, {}> {
@@ -46,6 +57,9 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
     autoZoom: true,
     controls: true,
     startIndex: 0,
+    i18nData: {
+      pages: 'Pages',
+    },
   };
 
   constructor(props: Props) {
@@ -103,6 +117,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
 
   renderListItems() {
     const { activeIndex } = this.state;
+    const { i18nData } = this.props;
 
     return this.state.files.map((file, index) => (
       <li
@@ -115,7 +130,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
         {file.title || file.source}
         {file.pdfProxy && (
           <div className="pdf-viewer-list-item-meta">
-            Seiten: {file.pdfProxy.numPages}
+            {i18nData!.pages}: {file.pdfProxy.numPages}
           </div>
         )}
       </li>
@@ -167,7 +182,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
   render() {
     const { activeIndex, files, listVisible, overlayMode } = this.state;
     const pdfToShow = files[activeIndex];
-    const { autoZoom, controls } = this.props;
+    const { autoZoom, controls, i18nData } = this.props;
 
     return (
       <div className="pdf-multi-viewer" ref={this.viewerContainer}>
@@ -192,6 +207,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
               autoZoom={autoZoom}
               controls={controls}
               pdfDoc={pdfToShow.pdfProxy}
+              i18nData={i18nData}
             />
           )}
         </div>
