@@ -33,7 +33,7 @@ type State = {
   overlayMode: boolean;
 };
 
-type I18nData = {
+export type I18nData = {
   pages?: string;
 } & I18nDataRenderer;
 

@@ -56,12 +56,31 @@ The MultiViewer allows you to pass an array of source strings or an object defin
 
 Props:
 
-| Name       | Required | Default | Type      | Description                                                    |
-| ---------- | -------- | ------- | --------- | -------------------------------------------------------------- |
-| pdfs       | true     |         | {array}   | An array of strings or objects                                 |
-| autoZoom   |          | true    | {boolean} | enables/disables autoZoom on component mount and window resize |
-| controls   |          | true    | {boolean} | enables/disables controls to e.g. change renderer zoom         |
-| startIndex |          | 0       | {number}  | first pdf to load using array index                            |
+| Name       | Required | Default | Type       | Description                                                    |
+| ---------- | -------- | ------- | ---------- | -------------------------------------------------------------- |
+| pdfs       | true     |         | {array}    | An array of strings or objects                                 |
+| autoZoom   |          | true    | {boolean}  | enables/disables autoZoom on component mount and window resize |
+| controls   |          | true    | {boolean}  | enables/disables controls to e.g. change renderer zoom         |
+| i18nData   |          | {}\*    | {I18nData} | An object of translated strings, default language is en        |
+| startIndex |          | 0       | {number}   | first pdf to load using array index                            |
+
+### i18n
+
+To be able to use different i18n libraries eg. i18next or react-intl you can pass an i18n object with translated strings to the component.
+
+\*defaults:
+
+```javascript
+{
+  // Viewer
+  pages: 'Pages',
+  // Renderer
+  zoom: 'Automatic zoom',
+  originalSize: 'Original size',
+  scaleUp: 'Scale up',
+  scaleDown: 'Scale down',
+}
+```
 
 ### PdfRenderer
 
@@ -74,6 +93,7 @@ Props:
 | pdfDoc   | true     |         | {PDFDocumentProxy} | A proxy of the pdf document to display                         |
 | autoZoom |          | true    | {boolean}          | enables/disables autoZoom on component mount and window resize |
 | controls |          | true    | {boolean}          | enables/disables controls to e.g. change renderer zoom         |
+| i18nData |          | {}\*    | {I18nDataRenderer} | An object of translated strings, default language is en        |
 
 [1]: https://mozilla.github.io/pdf.js/
 [2]: https://marcklei.github.io/react-pdfjs-multi/
