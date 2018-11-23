@@ -173,7 +173,6 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
     this.setState((state: State) => ({
       files: state.files.map((pdfFile, pdfIndex) => {
         if (pdfIndex !== index) return pdfFile;
-        console.log(index);
         return {
           ...pdfFile,
           ...postion,
