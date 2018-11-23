@@ -88,12 +88,16 @@ If you like to implement your own custom multi renderer logic you can use the Pd
 
 Props:
 
-| Name     | Required | Default | Type               | Description                                                    |
-| -------- | -------- | ------- | ------------------ | -------------------------------------------------------------- |
-| pdfDoc   | true     |         | {PDFDocumentProxy} | A proxy of the pdf document to display                         |
-| autoZoom |          | true    | {boolean}          | enables/disables autoZoom on component mount and window resize |
-| controls |          | true    | {boolean}          | enables/disables controls to e.g. change renderer zoom         |
-| i18nData |          | {}\*    | {I18nDataRenderer} | An object of translated strings, default language is en        |
+| Name          | Required | Default | Type               | Description                                                    |
+| ------------- | -------- | ------- | ------------------ | -------------------------------------------------------------- |
+| pdfDoc        | true     |         | {PDFDocumentProxy} | A proxy of the pdf document to display                         |
+| autoZoom      |          | true    | {boolean}          | enables/disables autoZoom on component mount and window resize |
+| controls      |          | true    | {boolean}          | enables/disables controls to e.g. change renderer zoom         |
+| i18nData      |          | {}\*    | {I18nDataRenderer} | An object of translated strings, default language is en        |
+| zoom          |          | null    | {number}           | Initial Zoom                                                   |
+| scrollTop     |          | null    | {number}           | Initial ScrollTop                                              |
+| scrollLeft    |          | null    | {number}           | Initial ScrollLeft                                             |
+| pdfChangeHook |          | null    | {func}             | Callback function which gets a position object                 |
 
 [1]: https://mozilla.github.io/pdf.js/
 [2]: https://marcklei.github.io/react-pdfjs-multi/
