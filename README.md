@@ -1,6 +1,6 @@
 # react-pdfjs-multi
 
-[![Build Status](https://travis-ci.org/marcklei/react-pdfjs-multi.svg?branch=master)](https://travis-ci.org/marcklei/react-pdfjs-multi)
+[![Build Status](https://travis-ci.com/marcklei/react-pdfjs-multi.svg?branch=master)](https://travis-ci.com/marcklei/react-pdfjs-multi)
 [![David Dependencies](https://david-dm.org/marcklei/react-pdfjs-multi.svg)](https://david-dm.org/marcklei/react-pdfjs-multi)
 [![Coverage Status](https://coveralls.io/repos/github/marcklei/react-pdfjs-multi/badge.svg?branch=master)](https://coveralls.io/github/marcklei/react-pdfjs-multi?branch=master)
 
