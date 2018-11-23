@@ -97,6 +97,7 @@ Props:
 | zoom          |          | null    | {number}           | Initial Zoom                                                   |
 | scrollTop     |          | null    | {number}           | Initial ScrollTop                                              |
 | scrollLeft    |          | null    | {number}           | Initial ScrollLeft                                             |
+| activeIndex   |          | null    | {number}           | Is required whenn the pdfChangeHook is used                    |
 | pdfChangeHook |          | null    | {func}             | Callback function which gets a position object                 |
 
 [1]: https://mozilla.github.io/pdf.js/
