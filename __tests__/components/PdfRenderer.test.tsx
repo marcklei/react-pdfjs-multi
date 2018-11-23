@@ -25,6 +25,8 @@ PDFViewer.mockImplementation(() => mockPdfViewer);
 const proxyMock = { numPages: 1 } as PDFDocumentProxy;
 const proxyMockAnother = { numPages: 2 } as PDFDocumentProxy;
 
+const firstPagePromise = Promise.resolve();
+
 describe('<PdfRenderer />', () => {
   it('should exist', () => {
     expect(PdfRenderer).toBeDefined();
@@ -51,18 +53,24 @@ describe('<PdfRenderer />', () => {
     ).toBeTruthy();
   });
 
-  it('calls reScale when autoZoom enabled', () => {
-    const spy = jest.spyOn(PdfRenderer.prototype, 'reScale');
-    mount<PdfRenderer>(<PdfRenderer pdfDoc={proxyMock} />);
-    expect(spy).toHaveBeenCalled();
-    spy.mockRestore();
+  it('calls autoFitScale when autoZoom enabled', () => {
+    const wrapper = mount<PdfRenderer>(<PdfRenderer pdfDoc={proxyMock} />);
+    const spy = jest.spyOn(wrapper.instance(), 'autoFitScale');
+
+    return firstPagePromise.then(() => {
+      expect(spy).toHaveBeenCalled();
+    });
   });
 
-  it('does not call reScale when autoZoom disabled', () => {
-    const spy = jest.spyOn(PdfRenderer.prototype, 'reScale');
-    mount<PdfRenderer>(<PdfRenderer pdfDoc={proxyMock} autoZoom={false} />);
-    expect(spy).not.toBeCalled();
-    spy.mockRestore();
+  it('does not call autoFitScale when autoZoom disabled', () => {
+    const wrapper = mount<PdfRenderer>(
+      <PdfRenderer pdfDoc={proxyMock} autoZoom={false} />,
+    );
+    const spy = jest.spyOn(wrapper.instance(), 'autoFitScale');
+
+    return firstPagePromise.then(() => {
+      expect(spy).not.toBeCalled();
+    });
   });
 
   it('zoomOut does not set negative scale state', () => {
@@ -150,10 +158,10 @@ describe('<PdfRenderer />', () => {
     expect(wrapper.instance().pdfViewer.setDocument).toHaveBeenCalled();
   });
 
-  it('calls reScale on the pdfViewer when the pdfDoc changes', () => {
+  it('calls rePosition on the pdfViewer when the pdfDoc changes', () => {
     const wrapper = mount<PdfRenderer>(<PdfRenderer pdfDoc={proxyMock} />);
-    wrapper.instance().reScale = jest.fn();
+    wrapper.instance().rePosition = jest.fn();
     wrapper.setProps({ pdfDoc: proxyMockAnother });
-    expect(wrapper.instance().reScale).toHaveBeenCalled();
+    expect(wrapper.instance().rePosition).toHaveBeenCalled();
   });
 });

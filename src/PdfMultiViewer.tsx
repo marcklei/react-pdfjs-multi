@@ -1,8 +1,8 @@
 import React, { PureComponent, RefObject } from 'react';
-import { PDFDocumentProxy } from 'pdfjs-dist';
-import PdfRenderer from './PdfRenderer';
+import PdfRenderer, { RendererDocumentPosition } from './PdfRenderer';
 import './PdfMultiViewer.scss';
 import { I18nDataRenderer } from './I18nContext';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
 const PdfjsLib = require('pdfjs-dist/build/pdf');
 
@@ -21,7 +21,11 @@ type PdfDefinition = {
 type PdfSource = string | PdfDefinition;
 
 export type PdfFile = {
+  index?: number;
   title?: string;
+  zoom?: number;
+  scrollTop?: number;
+  scrollLeft?: number;
   source: string;
   pdfProxy: PDFDocumentProxy | null;
 };
@@ -96,7 +100,6 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
       this.setState((state: State) => ({
         files: state.files.map((pdfFile, pdfIndex) => {
           if (pdfIndex !== index) return pdfFile;
-
           return {
             ...pdfFile,
             pdfProxy: pdfDoc,
@@ -166,6 +169,18 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
 
   onResizeEvent = () => this.setOverlayMode(this.getViewerContainerWidth());
 
+  rememberPosition = (index: number, postion: RendererDocumentPosition) =>
+    this.setState((state: State) => ({
+      files: state.files.map((pdfFile, pdfIndex) => {
+        if (pdfIndex !== index) return pdfFile;
+        console.log(index);
+        return {
+          ...pdfFile,
+          ...postion,
+        };
+      }),
+    }));
+
   componentDidMount() {
     window.addEventListener('resizeAutoZoom', this.onResizeEvent);
     // since calc() and vh is not supported by jsdom the containerWidth is passed to unit test setOverlayMode
@@ -204,10 +219,15 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
         <div className="pdf-viewer-multi-renderer">
           {pdfToShow.pdfProxy && (
             <PdfRenderer
+              activeIndex={activeIndex}
               autoZoom={autoZoom}
               controls={controls}
               pdfDoc={pdfToShow.pdfProxy}
               i18nData={i18nData}
+              pdfChangeHook={this.rememberPosition}
+              zoom={pdfToShow.zoom}
+              scrollTop={pdfToShow.scrollTop}
+              scrollLeft={pdfToShow.scrollLeft}
             />
           )}
         </div>

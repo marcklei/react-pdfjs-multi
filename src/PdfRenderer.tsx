@@ -17,14 +17,30 @@ const initialState = {
 
 type State = typeof initialState;
 
+export type RendererDocumentPosition = {
+  zoom: number;
+  scrollTop: number | null;
+  scrollLeft?: number | null;
+};
+
+type PdfChangeHook = (
+  documentIndex: number,
+  position: RendererDocumentPosition,
+) => void;
+
 type Props = {
   pdfDoc: PDFDocumentProxy;
 } & Partial<DefaultProps>;
 
 type DefaultProps = {
+  activeIndex?: number;
   autoZoom?: boolean;
   controls?: boolean;
   i18nData?: I18nDataRenderer;
+  pdfChangeHook?: PdfChangeHook | null;
+  zoom?: number;
+  scrollTop?: number;
+  scrollLeft?: number;
 };
 export default class PdfRenderer extends PureComponent<Props, {}> {
   state: State = initialState;
@@ -32,9 +48,13 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   pdfViewer: any;
 
   static defaultProps: DefaultProps = {
+    activeIndex: 0,
     autoZoom: true,
     controls: true,
     i18nData: defaultI18n,
+    pdfChangeHook: null,
+    scrollTop: 0,
+    scrollLeft: 0,
   };
 
   constructor(props: Props) {
@@ -54,16 +74,28 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
     if (autoZoom) {
       window.addEventListener('resizeAutoZoom', this.autoFitScale);
-      this.reScale();
     }
+
+    this.rePosition();
+
     this.setState(() => ({ isLoading: false }));
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { pdfDoc } = this.props;
+    const { pdfDoc, pdfChangeHook } = this.props;
+
     if (pdfDoc !== prevProps.pdfDoc) {
+      if (typeof pdfChangeHook === 'function') {
+        pdfChangeHook(prevProps.activeIndex as number, {
+          zoom: this.state.scale,
+          scrollTop: this.container.current && this.container.current.scrollTop,
+          scrollLeft:
+            this.container.current && this.container.current.scrollLeft,
+        });
+      }
+
       this.pdfViewer.setDocument(pdfDoc);
-      this.reScale();
+      this.rePosition();
     }
   }
 
@@ -89,9 +121,35 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     this.setScale(nextScale * 100);
   };
 
-  async reScale() {
+  async rePosition() {
+    const { autoZoom, zoom, scrollTop, scrollLeft } = this.props;
     await this.pdfViewer.firstPagePromise;
-    this.autoFitScale();
+
+    if (zoom) {
+      this.setScale(zoom);
+    } else if (!zoom && autoZoom) {
+      this.autoFitScale();
+    }
+
+    if (typeof scrollTop !== 'undefined') {
+      this.setScrollTop(scrollTop);
+    }
+
+    if (typeof scrollLeft !== 'undefined') {
+      this.setScrollLeft(scrollLeft);
+    }
+  }
+
+  setScrollTop(scrollTop: number) {
+    if (this.container.current) {
+      this.container.current.scrollTop = scrollTop;
+    }
+  }
+
+  setScrollLeft(scrollLeft: number) {
+    if (this.container.current) {
+      this.container.current.scrollLeft = scrollLeft;
+    }
   }
 
   setScale = (scale: number) => {

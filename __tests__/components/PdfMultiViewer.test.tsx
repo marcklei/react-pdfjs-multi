@@ -15,14 +15,13 @@ describe('<PdfMultiViewer />', () => {
     expect(PdfMultiViewer).toBeDefined();
   });
 
-  it('renders the PdfRenderer', () => {
+  it('renders the PdfRenderer', async () => {
     const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf']} />,
     );
 
-    return getDocumentPromise.then(() => {
-      expect(wrapper.find(PdfRenderer).exists()).toBeTruthy();
-    });
+    await getDocumentPromise;
+    expect(wrapper.find(PdfRenderer).exists()).toBeTruthy();
   });
 
   it('should set overlayMode true', () => {
@@ -39,7 +38,7 @@ describe('<PdfMultiViewer />', () => {
     const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf']} />,
     );
-    wrapper.setState({ overlayMode: true });
+    wrapper.instance().setOverlayMode(330);
     wrapper.instance().setOverlayMode(1200);
 
     expect(wrapper.state().overlayMode).toBeFalsy();
@@ -64,49 +63,48 @@ describe('<PdfMultiViewer />', () => {
     expect(wrapper.state().activeIndex).toEqual(0);
   });
 
-  it('should change activeIndex when pdfProxy is present', () => {
+  it('should change activeIndex when pdfProxy is present', async () => {
     const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
     );
 
-    return getDocumentPromise.then(() => {
-      const file = wrapper.state().files[1];
-      wrapper.instance().changePdf(1, file)();
+    await getDocumentPromise;
+    const file = wrapper.state().files[1];
+    wrapper.instance().changePdf(1, file)();
 
-      expect(wrapper.state().activeIndex).toEqual(1);
-    });
+    expect(wrapper.state().activeIndex).toEqual(1);
   });
 
-  it('should call toggleList when listVisible and overlayMode', () => {
+  it('should call toggleList when listVisible and overlayMode', async () => {
     const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
     );
 
     const spy = jest.spyOn(wrapper.instance(), 'toggleList');
 
-    return getDocumentPromise.then(() => {
-      const file = wrapper.state().files[1];
-      wrapper.setState({ overlayMode: true, listVisible: true });
-      wrapper.instance().changePdf(1, file)();
+    await getDocumentPromise;
+    const file = wrapper.state().files[1];
+    wrapper.instance().setOverlayMode(330);
+    wrapper.instance().changePdf(1, file)();
 
-      expect(spy).toHaveBeenCalled();
-    });
+    expect(spy).toHaveBeenCalled();
   });
 
-  it('should not call toggleList when listVisible and !overlayMode', () => {
+  it('should not call toggleList when listVisible and !overlayMode', async () => {
     const wrapper = shallow<PdfMultiViewer>(
       <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
     );
 
     const spy = jest.spyOn(wrapper.instance(), 'toggleList');
 
-    return getDocumentPromise.then(() => {
-      const file = wrapper.state().files[1];
-      wrapper.setState({ overlayMode: false, listVisible: true });
-      wrapper.instance().changePdf(1, file)();
+    await getDocumentPromise;
 
-      expect(spy).not.toHaveBeenCalled();
-    });
+    const file = wrapper.state().files[1];
+    // wrapper.setState({ overlayMode: false, listVisible: true });
+    wrapper.instance().setOverlayMode(1200);
+    wrapper.instance().changePdf(1, file)();
+
+    expect(spy).not.toHaveBeenCalled();
   });
 
   it('should destroy worker on unmount', () => {
