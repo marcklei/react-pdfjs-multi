@@ -185,7 +185,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
   zoomOut = () => {
     let { scale } = this.state;
-    scale = roundToNearest(scale, 10);
+    scale = scale === 125 ? scale : roundToNearest(scale, 10);
     let newScale;
 
     if (scale > 110 && scale !== 125) {

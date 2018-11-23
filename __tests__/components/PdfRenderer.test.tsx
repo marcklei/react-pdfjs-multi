@@ -109,6 +109,15 @@ describe('<PdfRenderer />', () => {
     expect(wrapper.state().scale).toEqual(70);
   });
 
+  it('zoomOut decrements scale state by 5', () => {
+    const wrapper = mount<PdfRenderer>(
+      <PdfRenderer pdfDoc={proxyMock} autoZoom={false} />,
+    );
+    wrapper.setState({ scale: 125 });
+    wrapper.instance().zoomOut();
+    expect(wrapper.state().scale).toEqual(120);
+  });
+
   it('zoomIn does not set scale state above 1000', () => {
     const wrapper = mount<PdfRenderer>(
       <PdfRenderer pdfDoc={proxyMock} autoZoom={false} />,
@@ -145,6 +154,15 @@ describe('<PdfRenderer />', () => {
     expect(wrapper.state().scale).toEqual(90);
   });
 
+  it('provided zoom gets apllied onMount', () => {
+    const wrapper = mount<PdfRenderer>(
+      <PdfRenderer pdfDoc={proxyMock} zoom={150} />,
+    );
+    return firstPagePromise.then(() => {
+      expect(wrapper.state().scale).toEqual(150);
+    });
+  });
+
   it('calls autoFitScale when setScale is call with a negativ scale', () => {
     const wrapper = mount<PdfRenderer>(<PdfRenderer pdfDoc={proxyMock} />);
     const spy = jest.spyOn(wrapper.instance(), 'autoFitScale');
@@ -163,5 +181,14 @@ describe('<PdfRenderer />', () => {
     wrapper.instance().rePosition = jest.fn();
     wrapper.setProps({ pdfDoc: proxyMockAnother });
     expect(wrapper.instance().rePosition).toHaveBeenCalled();
+  });
+
+  it('calls provided callback on the pdfViewer when the pdfDoc changes', () => {
+    const pdfChangeHookSpy = jest.fn();
+    const wrapper = mount<PdfRenderer>(
+      <PdfRenderer pdfDoc={proxyMock} pdfChangeHook={pdfChangeHookSpy} />,
+    );
+    wrapper.setProps({ pdfDoc: proxyMockAnother });
+    expect(pdfChangeHookSpy).toHaveBeenCalled();
   });
 });
