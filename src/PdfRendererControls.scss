@@ -16,8 +16,8 @@
     display: inline-flex;
     position: relative;
 
-    &:first-child {
-      margin-left: 4px;
+    &:last-child {
+      margin-left: 2px;
     }
 
     &:hover {
@@ -152,6 +152,54 @@
           @media screen and (-webkit-min-device-pixel-ratio: 2),
             screen and (min-resolution: 2dppx) {
             content: url('assets/toolbarButton-zoomIn@2x.png');
+            transform: scale(0.5);
+            top: -5px;
+            left: -1px;
+          }
+        }
+      }
+
+      .rotate-right-label {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+
+        &:before {
+          position: absolute;
+          display: inline-block;
+          top: 4px;
+          left: 7px;
+
+          content: url('assets/secondaryToolbarButton-rotateCw.png');
+
+          @media screen and (-webkit-min-device-pixel-ratio: 2),
+            screen and (min-resolution: 2dppx) {
+            content: url('assets/secondaryToolbarButton-rotateCw@2x.png');
+            transform: scale(0.5);
+            top: -5px;
+            left: -1px;
+          }
+        }
+      }
+
+      .rotate-left-label {
+        display: inline-block;
+        width: 0;
+        height: 0;
+        overflow: hidden;
+
+        &:before {
+          position: absolute;
+          display: inline-block;
+          top: 4px;
+          left: 7px;
+
+          content: url('assets/secondaryToolbarButton-rotateCcw.png');
+
+          @media screen and (-webkit-min-device-pixel-ratio: 2),
+            screen and (min-resolution: 2dppx) {
+            content: url('assets/secondaryToolbarButton-rotateCcw@2x.png');
             transform: scale(0.5);
             top: -5px;
             left: -1px;

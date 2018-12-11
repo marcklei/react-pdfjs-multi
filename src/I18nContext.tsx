@@ -5,6 +5,8 @@ export type I18nDataRenderer = {
   originalSize?: string;
   scaleUp?: string;
   scaleDown?: string;
+  rotateLeft?: string;
+  rotateRight?: string;
 };
 
 export const defaultI18n: I18nDataRenderer = {
@@ -12,6 +14,8 @@ export const defaultI18n: I18nDataRenderer = {
   originalSize: 'Original size',
   scaleUp: 'Scale up',
   scaleDown: 'Scale down',
+  rotateLeft: 'Rotate left',
+  rotateRight: 'Rotate right',
 };
 
 export const I18nContext = React.createContext(defaultI18n);

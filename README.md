@@ -77,6 +77,8 @@ To be able to use different i18n libraries eg. i18next or react-intl you can pas
   // Renderer
   zoom: 'Automatic zoom',
   originalSize: 'Original size',
+  rotateLeft: 'Rotate left',
+  rotateRight: 'Rotate right',
   scaleUp: 'Scale up',
   scaleDown: 'Scale down',
 }
@@ -95,6 +97,7 @@ Props:
 | controls      |          | true    | {boolean}          | enables/disables controls to e.g. change renderer zoom         |
 | i18nData      |          | {}\*    | {I18nDataRenderer} | An object of translated strings, default language is en        |
 | zoom          |          | null    | {number}           | Initial Zoom                                                   |
+| rotation      |          | null    | {number}           | Initial Rotation                                               |
 | scrollTop     |          | null    | {number}           | Initial ScrollTop                                              |
 | scrollLeft    |          | null    | {number}           | Initial ScrollLeft                                             |
 | activeIndex   |          | null    | {number}           | Is required whenn the pdfChangeHook is used                    |

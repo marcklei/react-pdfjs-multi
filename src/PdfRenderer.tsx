@@ -19,6 +19,7 @@ type State = typeof initialState;
 
 export type RendererDocumentPosition = {
   zoom: number;
+  rotation: number;
   scrollTop: number | null;
   scrollLeft?: number | null;
 };
@@ -39,6 +40,7 @@ type DefaultProps = {
   i18nData?: I18nDataRenderer;
   pdfChangeHook?: PdfChangeHook | null;
   zoom?: number;
+  rotation?: number;
   scrollTop?: number;
   scrollLeft?: number;
 };
@@ -53,6 +55,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     controls: true,
     i18nData: defaultI18n,
     pdfChangeHook: null,
+    rotation: 0,
     scrollTop: 0,
     scrollLeft: 0,
   };
@@ -88,6 +91,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
       if (typeof pdfChangeHook === 'function') {
         pdfChangeHook(String(prevProps.activeIndex), {
           zoom: this.state.scale,
+          rotation: this.pdfViewer.pagesRotation,
           scrollTop: this.container.current && this.container.current.scrollTop,
           scrollLeft:
             this.container.current && this.container.current.scrollLeft,
@@ -122,8 +126,12 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   };
 
   async rePosition() {
-    const { autoZoom, zoom, scrollTop, scrollLeft } = this.props;
+    const { autoZoom, zoom, rotation, scrollTop, scrollLeft } = this.props;
     await this.pdfViewer.firstPagePromise;
+
+    if (rotation) {
+      this.pdfViewer.pagesRotation = rotation;
+    }
 
     if (zoom) {
       this.setScale(zoom);
@@ -201,6 +209,16 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     this.setScale(newScale);
   };
 
+  rotateRight = () => {
+    const currentRotation = this.pdfViewer.pagesRotation;
+    this.pdfViewer.pagesRotation = currentRotation + 90;
+  };
+
+  rotateLeft = () => {
+    const currentRotation = this.pdfViewer.pagesRotation;
+    this.pdfViewer.pagesRotation = currentRotation - 90;
+  };
+
   render() {
     const { isLoading, scale } = this.state;
     const { autoZoom, controls, i18nData } = this.props;
@@ -215,6 +233,8 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
               setScale={this.setScale}
               onZoomIn={this.zoomIn}
               onZoomOut={this.zoomOut}
+              onRotateRight={this.rotateRight}
+              onRotateLeft={this.rotateLeft}
             />
           </I18nContext.Provider>
         )}

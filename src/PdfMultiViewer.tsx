@@ -24,6 +24,7 @@ type PdfFile = {
   index?: number;
   title?: string;
   zoom?: number;
+  rotation?: number;
   scrollTop?: number;
   scrollLeft?: number;
   source: string;
@@ -169,13 +170,13 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
 
   onResizeEvent = () => this.setOverlayMode(this.getViewerContainerWidth());
 
-  rememberPosition = (index: string, postion: RendererDocumentPosition) =>
+  rememberPosition = (index: string, position: RendererDocumentPosition) =>
     this.setState((state: State) => ({
       files: state.files.map((pdfFile, pdfIndex) => {
         if (pdfIndex !== Number(index)) return pdfFile;
         return {
           ...pdfFile,
-          ...postion,
+          ...position,
         };
       }),
     }));
@@ -225,6 +226,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
               i18nData={i18nData}
               pdfChangeHook={this.rememberPosition}
               zoom={pdfToShow.zoom}
+              rotation={pdfToShow.rotation}
               scrollTop={pdfToShow.scrollTop}
               scrollLeft={pdfToShow.scrollLeft}
             />
