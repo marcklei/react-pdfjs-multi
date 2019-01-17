@@ -81,6 +81,7 @@ To be able to use different i18n libraries eg. i18next or react-intl you can pas
   rotateRight: 'Rotate right',
   scaleUp: 'Scale up',
   scaleDown: 'Scale down',
+  download: 'Download',
 }
 ```
 
@@ -95,6 +96,7 @@ Props:
 | pdfDoc        | true     |         | {PDFDocumentProxy} | A proxy of the pdf document to display                         |
 | autoZoom      |          | true    | {boolean}          | enables/disables autoZoom on component mount and window resize |
 | controls      |          | true    | {boolean}          | enables/disables controls to e.g. change renderer zoom         |
+| downloadBtn   |          | true    | {boolean}          | enables/disables download button                               |
 | i18nData      |          | {}\*    | {I18nDataRenderer} | An object of translated strings, default language is en        |
 | zoom          |          | null    | {number}           | Initial Zoom                                                   |
 | rotation      |          | null    | {number}           | Initial Rotation                                               |

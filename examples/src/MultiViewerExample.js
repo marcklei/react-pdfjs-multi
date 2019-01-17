@@ -18,6 +18,7 @@ class MultiViewerExample extends PureComponent {
       <PdfMultiViewer
         pdfs={pdfFiles}
         i18nData={{
+          download: 'Herunterladen',
           scaleDown: 'Verkleinern',
           scaleUp: 'Vergrößern',
           originalSize: 'Originalgröße',

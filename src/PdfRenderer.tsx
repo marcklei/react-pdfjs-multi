@@ -9,6 +9,9 @@ const roundToNearest = (numToRound: number, numToRoundTo: number) =>
   Math.round(numToRound / numToRoundTo) * numToRoundTo;
 
 const { PDFViewer } = require('pdfjs-dist/web/pdf_viewer');
+const { DownloadManager } = require('pdfjs-dist/lib/web/download_manager');
+const { getPDFFileNameFromURL } = require('pdfjs-dist/lib/web/ui_utils');
+
 const initialState = {
   scale: 100,
   isLoading: true,
@@ -37,6 +40,7 @@ type DefaultProps = {
   activeIndex?: string;
   autoZoom?: boolean;
   controls?: boolean;
+  downloadBtn: boolean;
   i18nData?: I18nDataRenderer;
   pdfChangeHook?: PdfChangeHook | null;
   zoom?: number;
@@ -48,11 +52,13 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   state: State = initialState;
   container: RefObject<HTMLDivElement>;
   pdfViewer: any;
+  downloadManager: any;
 
   static defaultProps: DefaultProps = {
     activeIndex: '0',
     autoZoom: true,
     controls: true,
+    downloadBtn: true,
     i18nData: defaultI18n,
     pdfChangeHook: null,
     rotation: 0,
@@ -64,6 +70,9 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     super(props);
     this.container = React.createRef();
     this.pdfViewer = null;
+    this.downloadManager = new DownloadManager({
+      disableCreateObjectURL: false,
+    });
   }
 
   async componentDidMount() {
@@ -219,9 +228,27 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
     this.pdfViewer.pagesRotation = currentRotation - 90;
   };
 
+  download = async () => {
+    const pdfDoc = this.props.pdfDoc as any;
+    const { url } = pdfDoc._transport._params;
+    const filename = getPDFFileNameFromURL(url);
+
+    const downloadByUrl = () => {
+      this.downloadManager.downloadUrl(url, filename);
+    };
+
+    try {
+      const data = await this.props.pdfDoc.getData();
+      const blob = new Blob([data], { type: 'application/pdf' });
+      this.downloadManager.download(blob, url, filename);
+    } catch (e) {
+      downloadByUrl();
+    }
+  };
+
   render() {
     const { isLoading, scale } = this.state;
-    const { autoZoom, controls, i18nData } = this.props;
+    const { autoZoom, controls, downloadBtn, i18nData } = this.props;
 
     return (
       <div className="renderer-container">
@@ -229,8 +256,10 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
           <I18nContext.Provider value={{ ...defaultI18n, ...i18nData! }}>
             <PdfRendererControls
               autoZoom={autoZoom}
+              downloadBtn={downloadBtn}
               scale={scale}
               setScale={this.setScale}
+              onDownload={this.download}
               onZoomIn={this.zoomIn}
               onZoomOut={this.zoomOut}
               onRotateRight={this.rotateRight}

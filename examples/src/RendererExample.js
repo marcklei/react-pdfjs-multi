@@ -23,7 +23,7 @@ class RendererExample extends PureComponent {
 
     if (!pdfDoc) return false;
 
-    return <PdfRenderer pdfDoc={pdfDoc} />;
+    return <PdfRenderer pdfDoc={pdfDoc} downloadBtn={false} />;
   }
 }
 
