@@ -71,7 +71,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
     super(props);
 
     PdfjsLib.GlobalWorkerOptions.workerSrc =
-      '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.worker.js';
+      '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.worker.js';
 
     this.worker = new PdfjsLib.PDFWorker('pdf-viewer');
 

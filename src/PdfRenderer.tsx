@@ -4,13 +4,12 @@ import PdfRendererControls from './PdfRendererControls';
 import 'pdfjs-dist/web/pdf_viewer.css';
 import './PdfRenderer.scss';
 import { I18nDataRenderer, defaultI18n, I18nContext } from './I18nContext';
+import { getPDFFileNameFromURL } from './lib/filenameHelper';
 
 const roundToNearest = (numToRound: number, numToRoundTo: number) =>
   Math.round(numToRound / numToRoundTo) * numToRoundTo;
 
-const { PDFViewer } = require('pdfjs-dist/web/pdf_viewer');
-const { DownloadManager } = require('pdfjs-dist/lib/web/download_manager');
-const { getPDFFileNameFromURL } = require('pdfjs-dist/lib/web/ui_utils');
+const { PDFViewer, DownloadManager } = require('pdfjs-dist/web/pdf_viewer');
 
 const initialState = {
   scale: 100,
@@ -231,6 +230,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   download = async () => {
     const pdfDoc = this.props.pdfDoc as any;
     const { url } = pdfDoc._transport._params;
+    
     const filename = getPDFFileNameFromURL(url);
 
     const downloadByUrl = () => {

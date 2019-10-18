@@ -3,7 +3,7 @@ import { PdfRenderer, PdfjsLib } from 'react-pdfjs-multi';
 import 'react-pdfjs-multi/dist/react-pdfjs-multi.css';
 
 PdfjsLib.GlobalWorkerOptions.workerSrc =
-  '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.worker.js';
+  '//cdnjs.cloudflare.com/ajax/libs/pdf.js/2.2.228/pdf.worker.js';
 
 class RendererExample extends PureComponent {
   state = {

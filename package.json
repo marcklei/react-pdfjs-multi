@@ -37,8 +37,8 @@
   "devDependencies": {
     "@types/enzyme": "^3.1.14",
     "@types/enzyme-adapter-react-16": "^1.0.3",
-    "@types/jest": "^23.3.2",
-    "@types/pdfjs-dist": "^0.1.2",
+    "@types/jest": "^24.0.19",
+    "@types/pdfjs-dist": "^2.1.2",
     "@types/react": "^16.4.14",
     "@types/react-dom": "^16.0.7",
     "caniuse-lite": "^1.0.30000886",
@@ -52,18 +52,18 @@
     "postcss-url": "^8.0.0",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "rimraf": "^2.6.2",
-    "rollup": "^0.66.1",
-    "rollup-plugin-commonjs": "^9.1.8",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rimraf": "^3.0.0",
+    "rollup": "^1.24.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-peer-deps-external": "^2.2.0",
-    "rollup-plugin-postcss": "^1.6.2",
-    "rollup-plugin-scss": "^0.4.0",
-    "rollup-plugin-typescript2": "^0.17.0",
-    "rollup-plugin-url": "^1.4.0",
-    "ts-jest": "^23.10.1",
+    "rollup-plugin-postcss": "^2.0.3",
+    "rollup-plugin-scss": "^1.0.2",
+    "rollup-plugin-typescript2": "^0.24.3",
+    "rollup-plugin-url": "^3.0.0",
+    "ts-jest": "^24.1.0",
     "tslint": "^5.11.0",
-    "tslint-react": "^3.6.0",
+    "tslint-react": "^4.1.0",
     "typescript": "^3.0.3"
   },
   "peerDependencies": {
@@ -72,7 +72,7 @@
   },
   "dependencies": {
     "custom-event-polyfill": "^1.0.6",
-    "pdfjs-dist": "2.0.943"
+    "pdfjs-dist": "2.2.228"
   },
   "jest": {
     "transform": {
