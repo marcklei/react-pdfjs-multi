@@ -1,5 +1,5 @@
 const isDataSchema = (url: string) => {
-  var i = 0,
+  let i = 0,
     ii = url.length;
 
   while (i < ii && url[i].trim() === '') {
@@ -9,8 +9,8 @@ const isDataSchema = (url: string) => {
   return url.substring(i, i + 5).toLowerCase() === 'data:';
 }
 
-export const getPDFFileNameFromURL = (url: string) => {
-  const defaultFilename = url.length > 1 && url[1] !== undefined ? url[1] : 'document.pdf';
+export const getPDFFileNameFromURL = function (url: string) {
+  const defaultFilename = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'document.pdf';
 
   if (typeof url !== 'string') {
     return defaultFilename;
