@@ -9,21 +9,23 @@ jobs:
   include:
     - stage: test
       node_js:
-        - '10'
+        - '12'
       script:
         - yarn test --runInBand --no-cache
     - stage: coverage
-      node_js: '10'
+      node_js: '12'
       script:
         - yarn coveralls
     - stage: deploy ghpages
-      node_js: '10'
+      node_js: '12'
+      env:
+        - SKIP_PREFLIGHT_CHECK=true
       if: branch = master AND tag IS present
       script:
         - bash ./deploy-examples.sh
     - stage: npm release
       if: tag IS present
-      node_js: '10'
+      node_js: '12'
       deploy:
         provider: npm
         email: $NPM_EMAIL
