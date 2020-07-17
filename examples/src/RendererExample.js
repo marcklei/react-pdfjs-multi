@@ -13,7 +13,7 @@ class RendererExample extends PureComponent {
   async componentDidMount() {
     const pdfDoc = await PdfjsLib.getDocument({
       url: 'pdfs/compressed.tracemonkey-pldi-09.pdf',
-    });
+    }).promise;
 
     this.setState(() => ({ pdfDoc }));
   }

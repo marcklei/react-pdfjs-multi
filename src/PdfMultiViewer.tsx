@@ -96,7 +96,7 @@ export default class PdfMultiViewer extends PureComponent<Props, {}> {
       const pdfDoc = await PdfjsLib.getDocument({
         url: file.source,
         worker: this.worker,
-      });
+      }).promise;
 
       this.setState((state: State) => ({
         files: state.files.map((pdfFile, pdfIndex) => {

@@ -6,7 +6,7 @@ const { getDocument } = require('pdfjs-dist/build/pdf');
 jest.genMockFromModule('pdfjs-dist/build/pdf');
 jest.mock('pdfjs-dist/build/pdf');
 
-const getDocumentPromise = Promise.resolve({ numPages: 1 });
+const getDocumentPromise = { promise: Promise.resolve({ numPages: 1 }) };
 
 getDocument.mockImplementation(jest.fn().mockReturnValue(getDocumentPromise));
 
@@ -17,7 +17,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('renders the PdfRenderer', async () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf']} />
     );
 
     await getDocumentPromise;
@@ -26,7 +26,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should set overlayMode true', () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf']} />
     );
 
     wrapper.instance().setOverlayMode(400);
@@ -36,7 +36,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should set overlayMode false', () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf']} />
     );
     wrapper.instance().setOverlayMode(330);
     wrapper.instance().setOverlayMode(1200);
@@ -46,7 +46,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should toggle list state', () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf']} />
     );
     wrapper.instance().toggleList();
 
@@ -55,7 +55,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should not change activeIndex when pdfProxy not present', () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />
     );
     const file = wrapper.state().files[1];
     wrapper.instance().changePdf('1', file);
@@ -65,7 +65,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should change activeIndex when pdfProxy is present', async () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />
     );
 
     await getDocumentPromise;
@@ -77,7 +77,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should call toggleList when listVisible and overlayMode', async () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />
     );
 
     const spy = jest.spyOn(wrapper.instance(), 'toggleList');
@@ -92,7 +92,7 @@ describe('<PdfMultiViewer />', () => {
 
   it('should not call toggleList when listVisible and !overlayMode', async () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />
     );
 
     const spy = jest.spyOn(wrapper.instance(), 'toggleList');
@@ -109,10 +109,10 @@ describe('<PdfMultiViewer />', () => {
 
   it('should destroy worker on unmount', () => {
     const wrapper = shallow<PdfMultiViewer>(
-      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />,
+      <PdfMultiViewer pdfs={['test.pdf', 'test2.pdf']} />
     );
 
-    return getDocumentPromise.then(() => {
+    return getDocumentPromise.promise.then(() => {
       const spy = wrapper.instance().worker.destroy;
       wrapper.unmount();
       expect(spy).toHaveBeenCalled();
