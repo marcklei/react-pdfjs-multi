@@ -18,7 +18,7 @@ jobs:
         - yarn coveralls
     - stage: deploy ghpages
       node_js: '10'
-      if: branch = master
+      if: branch = master AND tag IS present
       script:
         - bash ./deploy-examples.sh
     - stage: npm release
