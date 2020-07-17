@@ -27,7 +27,7 @@ export default {
         cssnext({ warnForDuplicates: false }),
         cssnano(),
       ],
-      extract: 'dist/react-pdfjs-multi.css',
+      extract: 'react-pdfjs-multi.css',
     }),
     external(),
     typescript({
