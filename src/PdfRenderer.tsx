@@ -9,7 +9,11 @@ import { getPDFFileNameFromURL } from './lib/filenameHelper';
 const roundToNearest = (numToRound: number, numToRoundTo: number) =>
   Math.round(numToRound / numToRoundTo) * numToRoundTo;
 
-const { PDFViewer, DownloadManager } = require('pdfjs-dist/web/pdf_viewer');
+const {
+  PDFViewer,
+  DownloadManager,
+  EventBus,
+} = require('pdfjs-dist/web/pdf_viewer');
 
 const initialState = {
   scale: 100,
@@ -28,7 +32,7 @@ export type RendererDocumentPosition = {
 
 type PdfChangeHook = (
   documentIndex: string,
-  position: RendererDocumentPosition,
+  position: RendererDocumentPosition
 ) => void;
 
 type Props = {
@@ -79,6 +83,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
 
     this.pdfViewer = new PDFViewer({
       container: this.container.current,
+      eventBus: new EventBus(),
     });
 
     this.pdfViewer.setDocument(pdfDoc);
@@ -230,7 +235,7 @@ export default class PdfRenderer extends PureComponent<Props, {}> {
   download = async () => {
     const pdfDoc = this.props.pdfDoc as any;
     const { url } = pdfDoc._transport._params;
-    
+
     const filename = getPDFFileNameFromURL(url);
 
     const downloadByUrl = () => {
