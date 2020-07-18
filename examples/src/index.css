@@ -1,0 +1,36 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.examples {
+  height: calc(100vh - 50px);
+}
+
+.examples-nav {
+  height: 50px;
+  background-color: #0081c9;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.examples-nav li {
+  height: 50px;
+  padding: 0 20px;
+  display: inline-flex;
+  align-items: center;
+  border-right: 1px solid #fff;
+  cursor: pointer;
+  user-select: none;
+}
+
+.examples-nav li.active {
+  background-color: #0068a2;
+}
+
+.examples-nav li:hover {
+  background-color: #0070af;
+}
