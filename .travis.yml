@@ -20,7 +20,7 @@ jobs:
       node_js: '12'
       env:
         - SKIP_PREFLIGHT_CHECK=true
-      if: branch = master AND tag IS present
+      if: branch = master
       script:
         - bash ./deploy-examples.sh
     - stage: npm release
