@@ -1,6 +1,6 @@
 {
   "name": "react-pdfjs-multi",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "React wrapper for pdfjs with multiple file support",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
